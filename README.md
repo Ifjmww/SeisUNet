@@ -1,5 +1,4 @@
-# UNET_fault
-基于UNET不同池化方式的三维断层识别
+# SeisUNet for Seismic Fault Segmentation
 
 requirement
 ```angular2html
