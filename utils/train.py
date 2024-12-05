@@ -3,7 +3,8 @@
 import os
 import torch
 from tqdm import tqdm
-from utils.tools import load_data, compute_loss, con_matrix, save_train_info, select_best_model, save_result, choose_model
+from utils.tools import load_data, compute_loss, con_matrix, save_train_info, select_best_model, save_result, \
+    choose_model
 import torch.optim as optim
 from torch.optim.lr_scheduler import CosineAnnealingLR, ExponentialLR
 import numpy as np
@@ -64,8 +65,6 @@ def train(args):
 
         for step, data in enumerate(tqdm(train_loader, desc='[Train] Epoch' + str(epoch + 1) + '/' + str(args.epochs))):
             inputs, labels = data['x'].to(args.device), data['y'].to(args.device)
-            # print(inputs.size())
-            # print(labels)
             optimizer.zero_grad()
 
             outputs = model(inputs)
@@ -104,7 +103,8 @@ def train(args):
             " val dice:{:.4f}".format(val_dice / len(val_loader))
         )
 
-        train_result = np.append(train_loss / len(train_loader), [train_iou / len(train_loader), train_dice / len(train_loader)])
+        train_result = np.append(train_loss / len(train_loader),
+                                 [train_iou / len(train_loader), train_dice / len(train_loader)])
         train_RESULT.append(train_result)
 
         val_result = np.append(val_loss / len(val_loader), [val_iou / len(val_loader), val_dice / len(val_loader)])
@@ -113,11 +113,11 @@ def train(args):
         if (val_iou / len(val_loader)) > best_iou:
             print("new best ({:.6f} --> {:.6f}). ".format(best_iou, val_iou / len(val_loader)))
             best_iou = val_iou / len(val_loader)
-            best_model_name = 'UNET_BEST.pth'
+            best_model_name = 'SeisUNet_BEST.pth'
             torch.save(model.state_dict(), model_path + best_model_name)
 
         if (epoch + 1) % args.val_every == 0:
-            model_name = 'UNET_epoch_{}_iou_{:.4f}_CP.pth'.format(epoch + 1, val_iou / len(val_loader))
+            model_name = 'SeisUNet_epoch_{}_iou_{:.4f}_CP.pth'.format(epoch + 1, val_iou / len(val_loader))
             torch.save(model.state_dict(), model_path + model_name)
 
         scheduler.step()
@@ -202,7 +202,8 @@ def valid(args, val_loader=None):
         print("---")
         print("Save result of validation ... ")
 
-        save_result(args, segs, inputs, gts, val_loss / len(val_loader), val_iou / len(val_loader), val_dice / len(val_loader))
+        save_result(args, segs, inputs, gts, val_loss / len(val_loader), val_iou / len(val_loader),
+                    val_dice / len(val_loader))
 
         print("---")
         print("Save Finished ! ")

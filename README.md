@@ -1,27 +1,47 @@
-# SeisUNet for Seismic Fault Segmentation
+# SeisUNet:3D Seismic Fault Segmentation Using a Customized U-Net
 
-requirement
-```angular2html
-pip install pandas==1.3.5 torchsummary==1.5.1 scikit-learn==0.24.2 openpyxl==3.0.10
+![SeisUNet-architecture.png](./docs/SeisUNet-architecture.png)
+
+
+## Requirement
+- python 3.8
+- pytorch 1.8.1
+- pandas==1.3.5 
+- torchsummary==1.5.1 
+- scikit-learn==0.24.2 
+- openpyxl==3.0.10
+
+## DataSet
+```commandline
+data/
+│
+├── train/
+│   ├── x/
+│   │   └── 0.npy
+│   └── y/
+│       └── 1.npy
+└── valid/
+    ├── x/
+    │   └── 0.npy
+    └── y/
+        └── 1.npy
 ```
 
-
-train-test
+## Train
 ```angular2html
-python main.py --mode train --model_type LongPool_T_SO --exp test --epochs 2 --train_path ./data_3D_20/train/ --valid_path ./data_3D_20/valid/ --val_every 1 --in_channels 1 --batch_size 2
+python main.py --mode [train] --model_type [LP_P3_SO] --exp [EXP_NAME] --epochs [epochs_number] --train_path [train_path] --valid_path [valid_path]  --in_channels [1 or 3]
 ```
 
-train
+## Valid_only
 ```angular2html
-python main.py --mode train --model_type LongPool_SO --exp 0630_d800+NF_val24_e50_LP_SO_dice --epochs 50 --train_path ./data_3D_800/train/ --valid_path ./data_3D_800/valid/ --val_every 1 --in_channels 1 --workers 8 --batch_size 2
+python main.py --mode [valid_only] --model_type [LP_P3_SO] --exp [EXP_NAME] --valid_path [valid_path]  --in_channels [1 or 3]
 ```
 
-valid_only
+## Prediction
 ```angular2html
-python main.py --mode valid_only --model_type LongPool_T_SO --exp 0627_d800+NF_val96_e50_LPT_SO_dice --valid_path ./data_3D_800+NFF3/valid/ --in_channels 1
+python main.py --mode [pred] --model_type [LP_P3_SO] --exp [EXP_NAME] --in_channels [1 or 3] --pred_data_name f3
 ```
 
-test
-```angular2html
-python main.py --mode pred --model_type LongPool_T_SO --pred_mode Gauss --exp 0629_d800+NF_val24_e50_LPT_SO_dice --in_channels 1  --pred_data_name f3_2023_demo_cut
-```
+## Fault Segmentation Result of F3
+
+![FaultSegResult.png](./docs/FaultSegResult.png)

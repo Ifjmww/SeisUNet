@@ -52,10 +52,12 @@ def load_data(args):
     if args.mode == 'train':
         # 训练时的训练集
         train_dataset = FaultDataset(args.train_path, args.mode, transform=None)
-        train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers, drop_last=True)
+        train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers,
+                                      drop_last=True)
 
         valid_dataset = FaultDataset(args.valid_path, args.mode, transform=None)
-        valid_dataloader = DataLoader(valid_dataset, batch_size=args.batch_size_not_train, shuffle=True, num_workers=args.workers, drop_last=True)
+        valid_dataloader = DataLoader(valid_dataset, batch_size=args.batch_size_not_train, shuffle=True,
+                                      num_workers=args.workers, drop_last=True)
 
         print("--- create train dataloader ---")
         print(len(train_dataset), ", train dataset created")
@@ -69,7 +71,8 @@ def load_data(args):
 
     elif args.mode == 'valid_only':
         dataset = FaultDataset(args.valid_path, args.mode, transform=None)
-        dataloader = DataLoader(dataset, batch_size=args.batch_size_not_train, shuffle=True, num_workers=args.workers, drop_last=True)
+        dataloader = DataLoader(dataset, batch_size=args.batch_size_not_train, shuffle=True, num_workers=args.workers,
+                                drop_last=True)
 
         print("--- create valid dataloader ---")
         print(len(dataset), ", valid dataset created")
@@ -79,7 +82,8 @@ def load_data(args):
 
     else:  # args.mode=='test'
         dataset = FaultDataset(args.pred_path, args.mode, transform=None)
-        dataloader = DataLoader(dataset, batch_size=args.batch_size_not_train, shuffle=False, num_workers=args.workers, drop_last=True)
+        dataloader = DataLoader(dataset, batch_size=args.batch_size_not_train, shuffle=False, num_workers=args.workers,
+                                drop_last=True)
         print("--- create prediction dataloader ---")
         print(len(dataset), ", prediction dataset created")
         print(len(dataloader), ", prediction dataloaders created")
@@ -216,7 +220,6 @@ def save_result(args, segs, inputs, gts, val_loss, val_iou, val_dice):
     for i in range(len(inputs)):
 
         seg = segs[i].argmax(axis=1)
-        # seg = segs[i][:, 1, :, :]
         img = inputs[i]
         gt = gts[i]
         seg = np.squeeze(seg)
@@ -329,35 +332,23 @@ def save_result(args, segs, inputs, gts, val_loss, val_iou, val_dice):
 
                 plt.savefig(result_path + '/picture/No_' + str(i) + '_idx_' + str(idx) + '_dim_2.png')
                 plt.close()
-        # else:
-        #     raise ValueError("in_channels should be 1 or 2 !")
 
 
 def load_pred_data(args):
-    if args.pred_data_name == 'f3wu':
-        print("Data use f3wu.")
-        data, shape_0, shape_1, shape_2 = np.fromfile("./data_pred/f3wu/gxl.dat", dtype=np.single), 512, 384, 128
-        data = np.reshape(data, (shape_0, shape_1, shape_2))
-    elif args.pred_data_name == 'f3_2023_demo_cut':
-        print("Data use f3_2023_demo_cut transpose.")
-        data = np.load('./data_pred/f3_filter_t/F3_filter_cut_transpose.npy')
-    elif args.pred_data_name == 'kerry':
+
+    if args.pred_data_name == 'kerry':
         print("Data use kerry.")
-        data = np.load('D:/Test/dataset/seismic/原始数据/各种三维断层数据/numpy/Kerry3D_t1252_c730_i286.npy')
+        data = np.load('./data_pred/Kerry3D_t1252_c730_i286.npy')
     elif args.pred_data_name == 'kerry_mini':
         print("Data use kerry_mini.")
-        data = np.load('D:/Test/dataset/seismic/原始数据/各种三维断层数据/numpy/Kerry_mini3D_t480_c730_i286.npy')
-    elif args.pred_data_name == 'f3_2023_demo':
+        data = np.load('./data_pred/Kerry_mini3D_t480_c730_i286.npy')
+    elif args.pred_data_name == 'f3':
         print("Data use f3_3d_c.")
-        data = np.load('F:/New_Test/FaultData/F3_Demo_2023/Rawdata/F3_np.npy')
+        data = np.load('./data_pred/F3.npy')
         data = np.transpose(data, (1, 0, 2))
-    elif args.pred_data_name == 'parihaka_train':
-        print("Data use parihaka_train.")
-        data = np.load('F:/New_Test/FaultDataProcess/Parihaka/numpy/TrainingData_Image.npy')
-        data = np.transpose(data)
-    elif args.pred_data_name == 'f3wang':
-        print("Data use f3wang.")
-        data = np.load('F:/New_Test/IS-Net_fault_3D/Seismic_data/F3_Wang_CUT/x/F3_Wang_CUT.npy')
+    elif args.pred_data_name == 'opunake':
+        print("Data use opunake.")
+        data = np.load('./data_pred/opunake.npy')
         data = np.transpose(data)
     else:
         raise ValueError('Pred_data_name error!')
