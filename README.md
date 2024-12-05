@@ -25,8 +25,3 @@ test
 ```angular2html
 python main.py --mode pred --model_type LongPool_T_SO --pred_mode Gauss --exp 0629_d800+NF_val24_e50_LPT_SO_dice --in_channels 1  --pred_data_name f3_2023_demo_cut
 ```
-
-test_circle
-```angular2html
-python main.py --mode pred --model_type LongPool_T_SO --exp 0627_d800+NF_train48_val48_e50_LPT_SO_dice --in_channels 1 --pred_data_name f3_2023_demo_cut --pred_mode Circle
-```
